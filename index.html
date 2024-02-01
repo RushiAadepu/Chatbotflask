@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with the Bot!</title>
+</head>
+<body>
+    <h1>Ask me anything!</h1>
+
+    <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Enter your question">
+        <input type="submit" value="Ask!">
+    </form>
+
+    <p id="bot-response"></p>
+
+    <script>
+        const form = document.getElementById("chat-form");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const userInput = document.getElementById("user-input").value;
+
+            fetch("http://localhost:5000/generate_response", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ user_input: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("bot-response").textContent = data.response;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
